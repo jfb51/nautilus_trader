@@ -1740,3 +1740,20 @@ class TestActor:
         # Act, Assert
         with pytest.raises(ValueError):
             actor.request_bars(bar_type, start, stop)
+
+    def test_subscribe_performance(self):
+        # Arrange
+        actor = MockActor()
+        actor.register_base(
+            trader_id=self.trader_id,
+            msgbus=self.msgbus,
+            cache=self.cache,
+            clock=self.clock,
+            logger=self.logger,
+        )
+
+        # Act
+        from viztracer import VizTracer
+
+        with VizTracer(output_file="optional.json"):
+            actor.subscribe_quote_ticks(AUDUSD_SIM.id)
